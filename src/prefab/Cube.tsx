@@ -1,9 +1,11 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Mesh } from 'three'
 import { useFrame } from '@react-three/fiber'
+import { ThreeElements } from 'react-three-fiber'
 
-function Cube() {
+function Cube(props: ThreeElements['mesh']) {
     const meshRef = useRef<Mesh>(null!)
+    const [hovered, setHover] = useState(false)
 
     useEffect(() => {
         console.log(Boolean(meshRef.current))
@@ -17,9 +19,14 @@ function Cube() {
     })
 
     return (
-        <mesh ref={meshRef}>
+        <mesh
+            {...props}
+            ref={meshRef}
+            onPointerOver={(event) => setHover(true)}
+            onPointerOut={(event) => setHover(false)}
+        >
             <boxBufferGeometry />
-            <meshStandardMaterial color="hotpink" />
+            <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
         </mesh>
     )
 }
